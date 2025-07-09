@@ -56,10 +56,10 @@ go test ./...
 
 ## gRPC Methods
 
-- `CreatePost` — Create a new blog post
-- `GetPost` — Get a post by ID
-- `UpdatePost` — Update a post by ID
-- `DeletePost` — Delete a post by ID
+- `CreateBlogPost` — Create a new blog post
+- `GetBlogPost` — Get a post by ID
+- `UpdateBlogPost` — Update a post by ID
+- `DeleteBlogPost` — Delete a post by ID
 
 > **Note:** There is currently no method to fetch all posts.
 

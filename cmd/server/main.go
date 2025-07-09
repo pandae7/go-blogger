@@ -64,9 +64,9 @@ func printServerInfo(host string, port string) {
 	fmt.Println("===========================================")
 	fmt.Printf("Server Address: %s:%s\n", host, port)
 	fmt.Println("Available Methods:")
-	fmt.Println("  - CreatePost")
-	fmt.Println("  - GetPost")
-	fmt.Println("  - UpdatePost")
-	fmt.Println("  - DeletePost")
+	fmt.Println("  - CreateBlogPost")
+	fmt.Println("  - GetBlogPost")
+	fmt.Println("  - UpdateBlogPost")
+	fmt.Println("  - DeleteBlogPost")
 	fmt.Println("===========================================")
 }
