@@ -26,10 +26,10 @@ func NewBlogServiceServer(storage storage.BlogStorage) *BlogServiceServer {
 }
 
 func (s *BlogServiceServer) CreateBlogPost(ctx context.Context, req *pb.CreateBlogPostRequest) (*pb.CreateBlogPostResponse, error) {
-	log.Info("Creating new post with title: %s", req.GetTitle())
+	log.Infof("Creating new post with title: %s", req.GetTitle())
 
 	if err := s.validateCreatePostRequest(req); err != nil {
-		log.Error("Invalid request: %v", err)
+		log.Errorf("Invalid request: %v", err)
 		return &pb.CreateBlogPostResponse{
 			Success: false,
 			Message: err.Error(),
@@ -39,7 +39,7 @@ func (s *BlogServiceServer) CreateBlogPost(ctx context.Context, req *pb.CreateBl
 	// check PublishedDate
 	publicationDate := req.GetPublicationDate()
 	if publicationDate == nil {
-		log.Warn("Publication date is not set, using current time")
+		log.Warnf("Publication date is not set, using current time")
 		publicationDate = timestamppb.Now()
 	}
 
@@ -54,11 +54,11 @@ func (s *BlogServiceServer) CreateBlogPost(ctx context.Context, req *pb.CreateBl
 	}
 
 	if err := s.storage.CreatePost(ctx, post); err != nil {
-		log.Error("Failed to create post: %v", err)
+		log.Errorf("Failed to create post: %v", err)
 		return nil, status.Errorf(codes.Internal, "failed to create post: %v", err)
 	}
 
-	log.Info("Post created successfully with ID: %s", post.PostId)
+	log.Infof("Post created successfully with ID: %s", post.PostId)
 	return &pb.CreateBlogPostResponse{
 		Post:    s.modelToProtobuf(post),
 		Success: true,
@@ -67,7 +67,7 @@ func (s *BlogServiceServer) CreateBlogPost(ctx context.Context, req *pb.CreateBl
 }
 
 func (s *BlogServiceServer) GetBlogPost(ctx context.Context, req *pb.GetBlogPostRequest) (*pb.GetBlogPostResponse, error) {
-	log.Info("Retrieving post with ID: %s", req.GetPostId())
+	log.Infof("Retrieving post with ID: %s", req.GetPostId())
 
 	post, err := s.storage.GetPost(ctx, req.GetPostId())
 	if err != nil {
@@ -85,7 +85,7 @@ func (s *BlogServiceServer) GetBlogPost(ctx context.Context, req *pb.GetBlogPost
 }
 
 func (s *BlogServiceServer) UpdateBlogPost(ctx context.Context, req *pb.UpdateBlogPostRequest) (*pb.UpdateBlogPostResponse, error) {
-	log.Info("Updating post with ID: %s", req.GetPostId())
+	log.Infof("Updating post with ID: %s", req.GetPostId())
 
 	if err := s.validateUpdatePostRequest(req); err != nil {
 		return &pb.UpdateBlogPostResponse{
@@ -118,7 +118,7 @@ func (s *BlogServiceServer) UpdateBlogPost(ctx context.Context, req *pb.UpdateBl
 }
 
 func (s *BlogServiceServer) DeleteBlogPost(ctx context.Context, req *pb.DeleteBlogPostRequest) (*pb.DeleteBlogPostResponse, error) {
-	log.Info("Deleting post with ID: %s", req.GetPostId())
+	log.Infof("Deleting post with ID: %s", req.GetPostId())
 
 	if err := s.storage.DeletePost(ctx, req.GetPostId()); err != nil {
 		return &pb.DeleteBlogPostResponse{
@@ -127,7 +127,7 @@ func (s *BlogServiceServer) DeleteBlogPost(ctx context.Context, req *pb.DeleteBl
 		}, err
 	}
 
-	log.Info("Post deleted successfully with ID: %s", req.GetPostId())
+	log.Infof("Post deleted successfully with ID: %s", req.GetPostId())
 	return &pb.DeleteBlogPostResponse{
 		Success: true,
 		Message: "Post deleted successfully",
