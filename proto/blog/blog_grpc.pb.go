@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v6.31.1
-// source: proto/blog/blog.proto
+// source: blog.proto
 
 package blog
 
@@ -36,7 +36,7 @@ type BlogServiceClient interface {
 	// Update an existing blog post
 	UpdateBlogPost(ctx context.Context, in *UpdateBlogPostRequest, opts ...grpc.CallOption) (*UpdateBlogPostResponse, error)
 	// Delete a blog post by PostID
-	DeleteBlogPost(ctx context.Context, in *DeleteBlogPostRequest, opts ...grpc.CallOption) (*DeletePostResponse, error)
+	DeleteBlogPost(ctx context.Context, in *DeleteBlogPostRequest, opts ...grpc.CallOption) (*DeleteBlogPostResponse, error)
 }
 
 type blogServiceClient struct {
@@ -77,9 +77,9 @@ func (c *blogServiceClient) UpdateBlogPost(ctx context.Context, in *UpdateBlogPo
 	return out, nil
 }
 
-func (c *blogServiceClient) DeleteBlogPost(ctx context.Context, in *DeleteBlogPostRequest, opts ...grpc.CallOption) (*DeletePostResponse, error) {
+func (c *blogServiceClient) DeleteBlogPost(ctx context.Context, in *DeleteBlogPostRequest, opts ...grpc.CallOption) (*DeleteBlogPostResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(DeletePostResponse)
+	out := new(DeleteBlogPostResponse)
 	err := c.cc.Invoke(ctx, BlogService_DeleteBlogPost_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -98,7 +98,7 @@ type BlogServiceServer interface {
 	// Update an existing blog post
 	UpdateBlogPost(context.Context, *UpdateBlogPostRequest) (*UpdateBlogPostResponse, error)
 	// Delete a blog post by PostID
-	DeleteBlogPost(context.Context, *DeleteBlogPostRequest) (*DeletePostResponse, error)
+	DeleteBlogPost(context.Context, *DeleteBlogPostRequest) (*DeleteBlogPostResponse, error)
 	mustEmbedUnimplementedBlogServiceServer()
 }
 
@@ -118,7 +118,7 @@ func (UnimplementedBlogServiceServer) GetBlogPost(context.Context, *GetBlogPostR
 func (UnimplementedBlogServiceServer) UpdateBlogPost(context.Context, *UpdateBlogPostRequest) (*UpdateBlogPostResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateBlogPost not implemented")
 }
-func (UnimplementedBlogServiceServer) DeleteBlogPost(context.Context, *DeleteBlogPostRequest) (*DeletePostResponse, error) {
+func (UnimplementedBlogServiceServer) DeleteBlogPost(context.Context, *DeleteBlogPostRequest) (*DeleteBlogPostResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteBlogPost not implemented")
 }
 func (UnimplementedBlogServiceServer) mustEmbedUnimplementedBlogServiceServer() {}
@@ -239,5 +239,5 @@ var BlogService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "proto/blog/blog.proto",
+	Metadata: "blog.proto",
 }

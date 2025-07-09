@@ -1,11 +1,17 @@
 package main
 
 import (
-	"context"
 	"fmt"
-	"net/http"
+	"net"
+	"os"
+	"os/signal"
+	"syscall"
 
+	"github.com/pandae7/go-blogger/internal/server"
+	storage "github.com/pandae7/go-blogger/internal/storage"
+	pb "github.com/pandae7/go-blogger/proto/blog"
 	log "github.com/sirupsen/logrus"
+	"google.golang.org/grpc"
 )
 
 const (
@@ -25,17 +31,22 @@ func main() {
 
 	log.Infof("Starting server on %s:%s", host, port)
 
+	storage := storage.NewBlogStorage()
+
 	// Create a new gRPC server instance
 	newServer := grpc.NewServer()
 
-		go func() {
-		log.Printf("gRPC server starting on port %s", port)
-		log.Printf("Server ready to accept connections...")
-		
-		if err := grpcServer.Serve(lis); err != nil {
-			log.Fatalf("Failed to serve: %v", err)
-		}
-	}()
+	// creating a default blog service server for now
+	blogserver := server.NewBlogServiceServer(storage)
+
+	// register blog service server
+	pb.RegisterBlogServiceServer(newServer, blogserver)
+	// Print server information
+	printServerInfo(host, port)
+
+	if err := newServer.Serve(lis); err != nil {
+		log.Fatalf("Failed to serve: %v", err)
+	}
 
 	// Wait for interrupt signal to gracefully shutdown the server
 	quit := make(chan os.Signal, 1)
@@ -43,25 +54,19 @@ func main() {
 	<-quit
 
 	log.Println("Shutting down gRPC server...")
-	grpcServer.GracefulStop()
+	newServer.GracefulStop()
 	log.Println("Server stopped")
 }
 
-func printServerInfo(port string) {
+func printServerInfo(host string, port string) {
 	fmt.Println("===========================================")
 	fmt.Println("          gRPC Blog Service")
 	fmt.Println("===========================================")
-	fmt.Printf("Server Address: localhost:%s\n", port)
+	fmt.Printf("Server Address: %s:%s\n", host, port)
 	fmt.Println("Available Methods:")
 	fmt.Println("  - CreatePost")
 	fmt.Println("  - GetPost")
 	fmt.Println("  - UpdatePost")
 	fmt.Println("  - DeletePost")
-	fmt.Println("")
-	fmt.Println("Test with grpcurl:")
-	fmt.Printf("  grpcurl -plaintext localhost:%s list\n", port)
-	fmt.Printf("  grpcurl -plaintext localhost:%s blog.v1.BlogService/GetPost\n", port)
 	fmt.Println("===========================================")
 }
-
-

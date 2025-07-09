@@ -21,7 +21,7 @@ message BlogPost {
     string content = 3; // Content of the blog post
     string author = 4; // Author of the blog post
     google.protobuf.Timestamp publication_date = 5; // Publication date of the blog post
-    google.protobuf.Timestamp updated_date = 6; // Creation date of the blog post
+    google.protobuf.Timestamp updated_at = 6; // Creation date of the blog post
     repeated string tags = 7; // Tags associated with the blog post
 }
 
@@ -64,8 +64,9 @@ message UpdateBlogPostRequest {
     string post_id = 1; // Unique identifier for the post to update
     string title = 2; // New title of the blog post
     string content = 3; // New content of the blog post
-    repeated string tags = 5; // New tags associated with the blog post
-    // updated_date is automatically set to the current time when the post is updated
+    repeated string tags = 4; // New tags associated with the blog post
+    // publication_date is not allowed to be updated
+    // updated_at is automatically set to the current time when the post is updated
 }
 
 // Response message for updating a blog post
@@ -84,7 +85,7 @@ message DeleteBlogPostRequest {
 
 // Response message for deleting a blog post
 // Output: Success/Failure message
-message DeletePostResponse {
+message DeleteBlogPostResponse {
   bool success = 1;
   string message = 2;
 }
@@ -100,5 +101,5 @@ service BlogService {
     rpc UpdateBlogPost(UpdateBlogPostRequest) returns (UpdateBlogPostResponse);
 
     // Delete a blog post by PostID
-    rpc DeleteBlogPost(DeleteBlogPostRequest) returns (DeletePostResponse);
+    rpc DeleteBlogPost(DeleteBlogPostRequest) returns (DeleteBlogPostResponse);
 }
