@@ -37,7 +37,7 @@ A simple blogging platform built with Go for the backend and a demo gRPC client 
 ### Start the gRPC server
 
 ```bash
-go run main.go
+go run cmd/server/main.go
 ```
 The server listens on `localhost:8080` (or as configured).
 
