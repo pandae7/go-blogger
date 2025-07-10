@@ -66,3 +66,14 @@ go test ./...
 ## License
 
 MIT
+
+### References
+
+For gRPC Server & Client - 
+https://pascalallen.medium.com/how-to-build-a-grpc-server-in-go-943f337c4e05
+
+For Folder Structure - 
+https://github.com/pandae7/go-ai-stream
+
+For Interfaces, methods and Tests - 
+https://opendev.org/starlingx/app-node-interface-metrics-exporter/commit/423e49980e0f1e28e94c5ceeb6fa128854f8aeae 
